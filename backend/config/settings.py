@@ -27,6 +27,7 @@ APPS = {
     ),
     'LOCAL_APPS': (
         'posts',
+        'users',
     )
 }
 
