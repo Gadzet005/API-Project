@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 
 from posts.models import Post
-from posts.serializers import PostSerializer, MyPostSerializer
+from posts.serializers import PostSerializer, UserPostSerializer
 
 
 class PostViewSet(ModelViewSet):
@@ -49,6 +49,6 @@ class PostViewSet(ModelViewSet):
             return Response({"detail": "Такого пользователя не существует"}, status=status.HTTP_404_NOT_FOUND)
 
         queryset = Post.objects.filter(author=user)
-        serializer = MyPostSerializer(queryset, many=True)
+        serializer = UserPostSerializer(queryset, many=True)
 
         return Response({"user": user.username, "posts": serializer.data})

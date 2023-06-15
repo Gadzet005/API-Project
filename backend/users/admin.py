@@ -1,3 +1,33 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-# Register your models here.
+from users.models import User
+
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin):
+    readonly_fields = ("date_joined", "last_login")
+    list_display = ("username", "email", "is_superuser", "is_staff")
+    ordering = ("username",)
+    search_fields = ("username", "email")
+    list_display_links = ("username",)
+    list_filter = ("is_superuser", "is_staff")
+
+    fieldsets = (
+        (None, {"fields": ("username", "email", "password")}),
+        (
+            "Права и разрешения", {
+                "fields": (
+                    "is_active", "is_superuser", "is_staff", "groups", "user_permissions"
+                )
+            }
+        ),
+        ("Важные даты", {"fields": ("last_login", "date_joined")}),
+    )
+
+    add_fieldsets = (
+        (None, {
+            "classes": ("wide",),
+            "fields": ("email", "username", "password1", "password2"),
+        }),
+    )
