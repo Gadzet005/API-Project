@@ -18,7 +18,5 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class UserPostSerializer(PostSerializer):
-    class Meta:
-        model = Post
-        fields = ("id", "title", "text", "creation_date")
-        read_only_fields = ("creation_date",)
+    class Meta(PostSerializer.Meta):
+        fields = ("id", "title", "text", "creation_date", "tags")

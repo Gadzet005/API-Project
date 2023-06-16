@@ -8,12 +8,13 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from posts.models import Post
 from posts.serializers import PostSerializer, UserPostSerializer
+from posts.permissions import IsAuthorOrReadOnly
 
 
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
     lookup_url_kwarg = "post_id"
 
     @action(detail=True, url_path="stat")
