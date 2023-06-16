@@ -6,16 +6,16 @@ from users.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("username", "email", "last_login")
-        read_only_fields = ("last_login",)
+        fields = ('username', 'email', 'last_login')
+        read_only_fields = ('last_login',)
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("username", "email", "password")
+        fields = ('username', 'email', 'password')
         extra_kwargs = {
-            "password": {"write_only": True, "min_length": 8}
+            'password': {'write_only': True, 'min_length': 8}
         }
 
     def create(self, validated_data):
@@ -25,12 +25,12 @@ class RegisterSerializer(serializers.ModelSerializer):
 class ChangePasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("password",)
+        fields = ('password',)
         extra_kwargs = {
-            "password": {"write_only": True, "min_length": 8}
+            'password': {'write_only': True, 'min_length': 8}
         }
 
     def update(self, instance, validated_data):
-        instance.set_password(validated_data.get("password"))
+        instance.set_password(validated_data.get('password'))
         instance.save()
         return instance

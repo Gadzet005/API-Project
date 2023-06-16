@@ -7,9 +7,9 @@ from users.models import User
 
 
 class AuthBackend(ModelBackend):
-    """
+    '''
     Авторизация по username или по email
-    """
+    '''
     def authenticate(self, request, username=None, password=None, **kwargs):
         if username is None or password is None:
             return

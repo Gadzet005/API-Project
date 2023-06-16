@@ -11,16 +11,16 @@ from posts.serializers import UserPostSerializer
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    lookup_url_kwarg = "user_id"
+    lookup_url_kwarg = 'user_id'
     permission_classes = [IsOwnerOrReadOnly]
 
-    @action(detail=True, url_path="posts")
+    @action(detail=True, url_path='posts')
     def get_posts(self, request, user_id):
         user = self.get_object()
         serializer = UserPostSerializer(user.posts, many=True)
         return Response(serializer.data)
 
-    @action(methods=["post"], detail=False, url_path="register", serializer_class=RegisterSerializer)
+    @action(methods=['post'], detail=False, url_path='register', serializer_class=RegisterSerializer)
     def register(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -29,7 +29,7 @@ class UserViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @action(
-        methods=["put"], detail=True, url_path="change-password",
+        methods=['put'], detail=True, url_path='change-password',
         serializer_class=ChangePasswordSerializer
     )
     def change_password(self, request, user_id):
@@ -37,4 +37,4 @@ class UserViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response({"detail": "Пароль успешно изменен"})
+        return Response({'detail': 'Пароль успешно изменен'})

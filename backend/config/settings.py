@@ -12,6 +12,7 @@ SECRET_KEY = config.SECRET_KEY
 DEBUG = config.DEBUG
 ALLOWED_HOSTS = config.ALLOWED_HOSTS
 
+INTERNAL_IPS = ["127.0.0.1"]
 
 APPS = {
     'DJANGO_APPS': (
@@ -24,6 +25,8 @@ APPS = {
     ),
     'MODULE_APPS': (
         'rest_framework',
+        'rest_framework.authtoken',
+        'debug_toolbar'
     ),
     'LOCAL_APPS': (
         'posts',
@@ -42,6 +45,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -109,8 +113,12 @@ AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
     ]
 }
 
-if config.STATE == "DEV":
-    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"].append('rest_framework.renderers.BrowsableAPIRenderer')
+if config.STATE == 'DEV':
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'].append('rest_framework.renderers.BrowsableAPIRenderer')
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'].append('rest_framework.authentication.SessionAuthentication')
