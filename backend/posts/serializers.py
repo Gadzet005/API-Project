@@ -19,4 +19,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 class UserPostSerializer(PostSerializer):
     class Meta(PostSerializer.Meta):
-        fields = ('id', 'title', 'text', 'creation_date', 'tags')
+        fields = (
+            'id', 'title', 'text', 'creation_date',
+            'is_published', 'is_blocked', 'tags',
+        )

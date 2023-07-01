@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+from posts.managers import PostManager
+
 
 class Tag(models.Model):
     name = models.CharField('Название', max_length=50, unique=True)
@@ -22,6 +24,8 @@ class Post(models.Model):
     is_published = models.BooleanField('Опубликовано', default=True)
     is_blocked = models.BooleanField('Заблокировано', default=False)
     tags = models.ManyToManyField(Tag, verbose_name='Тэг')
+
+    objects = PostManager()
 
     class Meta:
         verbose_name = 'Пост'

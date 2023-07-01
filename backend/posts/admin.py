@@ -10,7 +10,7 @@ class PostAdmin(admin.ModelAdmin):
         'is_published', 'is_blocked', 'tags'
     )
     readonly_fields = ('author', 'creation_date')
-    list_display = ('title', 'author', 'creation_date')
+    list_display = ('title', 'author', 'creation_date', 'is_published', 'is_blocked')
     filter_horizontal = ('tags',)
 
 

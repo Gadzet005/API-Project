@@ -18,7 +18,7 @@ class UserViewSet(ModelViewSet):
     @action(detail=True, url_path='posts')
     def get_posts(self, request, user_id):
         user = self.get_object()
-        serializer = UserPostSerializer(user.posts, many=True)
+        serializer = UserPostSerializer(user.posts.allowed(), many=True)
         return Response(serializer.data)
 
     @action(methods=['post'], detail=False, url_path='register', serializer_class=RegisterSerializer)
@@ -28,9 +28,10 @@ class UserViewSet(ModelViewSet):
         serializer.save()
 
         auth_token = Token.objects.get(user=serializer.instance)
-        serializer.data['auth-token'] = auth_token
+        data = serializer.data.copy()
+        data['auth-token'] = auth_token.key
 
-        return Response(serializer.data)
+        return Response(data)
 
     @action(
         methods=['put'], detail=True, url_path='change-password',
