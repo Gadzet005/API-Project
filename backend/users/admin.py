@@ -14,7 +14,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_superuser', 'is_staff')
 
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
+        (None, {'fields': ('username', 'email', 'password',)}),
         (
             'Права и разрешения', {
                 'fields': (

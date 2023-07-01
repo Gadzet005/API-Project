@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
 
 from users.serializers import UserSerializer, RegisterSerializer, ChangePasswordSerializer
 from users.models import User
@@ -25,6 +26,9 @@ class UserViewSet(ModelViewSet):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
+        auth_token = Token.objects.get(user=serializer.instance)
+        serializer.data['auth-token'] = auth_token
 
         return Response(serializer.data)
 
