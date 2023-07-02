@@ -21,7 +21,10 @@ class UserViewSet(ModelViewSet):
         serializer = UserPostSerializer(user.posts.allowed(), many=True)
         return Response(serializer.data)
 
-    @action(methods=['post'], detail=False, url_path='register', serializer_class=RegisterSerializer)
+    @action(
+            methods=['post'], detail=False, url_path='register',
+            url_name='register', serializer_class=RegisterSerializer
+        )
     def register(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)

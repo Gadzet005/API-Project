@@ -1,0 +1,32 @@
+[
+    {
+        "isCorrect": true,
+        "data": {
+            "username": "Bob",
+            "email": "bob@mail.ru",
+            "password": "12345678"
+        }
+    },
+    {
+        "isCorrect": false,
+        "data": {
+            "username": "Another Bob With Same Email",
+            "email": "bob@mail.ru",
+            "password": "12345678"
+        }
+    },
+    {
+        "isCorrect": false,
+        "data": {
+            "username": "Bob"
+        }
+    },
+    {
+        "isCorrect": false,
+        "data": {
+            "username": "@Bob+",
+            "email": "bob@mail.ru",
+            "password": "12345678"
+        }
+    }
+]
