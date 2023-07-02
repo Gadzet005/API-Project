@@ -5,7 +5,7 @@ from posts.views import PostViewSet
 
 
 router = SimpleRouter()
-router.register('posts', PostViewSet, 'posts')
+router.register('posts', PostViewSet, 'post')
 
 urlpatterns = [
     path('', include(router.urls)),

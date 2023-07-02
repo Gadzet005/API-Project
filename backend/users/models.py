@@ -37,7 +37,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
 
     def get_absolute_url(self):
-        return reverse('users-detail', kwargs={'user_id': self.id})
+        return reverse('user-detail', kwargs={'user_id': self.id})
 
 
 @receiver(post_save, sender=User)

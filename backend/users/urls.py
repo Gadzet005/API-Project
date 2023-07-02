@@ -8,7 +8,7 @@ from users.routers import UsersRouter
 
 
 router = UsersRouter()
-router.register('users', UserViewSet, 'users')
+router.register('users', UserViewSet, 'user')
 
 urlpatterns = [
     path('', include(router.urls)),
