@@ -6,7 +6,7 @@ class UserManager(BaseUserManager):
 
     def _create_user(self, username, email, password, **extra_fields):
         if not email or not username:
-            raise ValueError('email и username должен быть указаны')
+            raise ValueError('email и username должны быть указаны')
 
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, **extra_fields)

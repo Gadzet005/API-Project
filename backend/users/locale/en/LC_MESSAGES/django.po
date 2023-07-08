@@ -1,0 +1,62 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-02 18:33+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\apps.py:8 .\models.py:35
+msgid "пользователи"
+msgstr "users"
+
+#: .\models.py:15
+msgid "почта"
+msgstr "email"
+
+#: .\models.py:17
+msgid "имя пользователя"
+msgstr "username"
+
+#: .\models.py:20
+msgid "активен"
+msgstr "active"
+
+#: .\models.py:21
+msgid "дата регистрации"
+msgstr "data joined"
+
+#: .\models.py:23
+msgid "статус персонала"
+msgstr "stuff status"
+
+#: .\models.py:24
+msgid "Определяет, есть ли у пользователя доступ к админ панели."
+msgstr "Determines whether the user has access to the admin panel."
+
+#: .\models.py:34
+msgid "пользователь"
+msgstr "user"
+
+#: .\validators.py:13
+msgid "Имя пользователя должно содержать более 2 символов."
+msgstr "Username must contain more than 2 characters."
+
+#: .\validators.py:18
+msgid "Имя пользователя может содержать только буквы, цифры и пробел."
+msgstr "Username can contain only letters, numbers and a space."
+
+#: .\views.py:49
+msgid "Пароль успешно изменен"
+msgstr "Password successfully changed"

@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from django.utils.translation import gettext as _
 from rest_framework.authtoken.models import Token
 
 from users.managers import UserManager
@@ -11,16 +12,16 @@ from users.validators import UsernameValidator
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField('Почта', unique=True)
+    email = models.EmailField(_('почта'), unique=True)
     username = models.CharField(
-        'Имя пользователя', max_length=30, unique=True,
+        _('имя пользователя'), max_length=30, unique=True,
         validators=[UsernameValidator()],
     )
-    is_active = models.BooleanField('Активен', default=True)
-    date_joined = models.DateTimeField('Дата регистрации', auto_now_add=True)
+    is_active = models.BooleanField(_('активен'), default=True)
+    date_joined = models.DateTimeField(_('дата регистрации'), auto_now_add=True)
     is_staff = models.BooleanField(
-        'Статус персонала', default=False,
-        help_text='Определяет, есть ли у пользователя доступ к админ панели',
+        _('статус персонала'), default=False,
+        help_text=_('Определяет, есть ли у пользователя доступ к админ панели.'),
     )
 
     objects = UserManager()
@@ -30,8 +31,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['username']
 
     class Meta:
-        verbose_name = 'пользователь'
-        verbose_name_plural = 'пользователи'
+        verbose_name = _('пользователь')
+        verbose_name_plural = _('пользователи')
 
     def __str__(self):
         return self.username

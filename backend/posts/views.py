@@ -1,3 +1,4 @@
+from django.utils.translation import gettext as _
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -28,10 +29,10 @@ class PostViewSet(ModelViewSet):
             letters[let] += 1
 
         data = {
-            'Длина заголовка': len(post.title),
-            'Длина текст': len(post.text),
-            'Самая частый символ': max(letters, key=lambda let: letters[let]),
-            'Самая редкий символ': min(letters, key=lambda let: letters[let]),
+            _('Длина заголовка'): len(post.title),
+            _('Длина текста'): len(post.text),
+            _('Самый частый символ'): max(letters, key=lambda let: letters[let]),
+            _('Самый редкий символ'): min(letters, key=lambda let: letters[let]),
         }
 
         return Response(data)
@@ -39,7 +40,7 @@ class PostViewSet(ModelViewSet):
     @action(detail=False, url_path='my')
     def my_posts(self, request):
         if not request.user.is_authenticated:
-            return Response({'detail': 'Вы не авторизованы'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': _('Вы не авторизованы')}, status=status.HTTP_403_FORBIDDEN)
 
         posts = Post.objects.filter(author=request.user)
         serializer = UserPostSerializer(posts, many=True)

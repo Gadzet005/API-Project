@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-02 18:45+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\apps.py:8 .\models.py:21
+msgid "посты"
+msgstr "posts"
+
+#: .\models.py:9
+msgid "автор"
+msgstr "author"
+
+#: .\models.py:10
+msgid "заголовок"
+msgstr "title"
+
+#: .\models.py:11
+msgid "текст"
+msgstr "text"
+
+#: .\models.py:12
+msgid "дата создания"
+msgstr "creation date"
+
+#: .\models.py:13
+msgid "опубликовано"
+msgstr "is published"
+
+#: .\models.py:14
+msgid "заблокировано"
+msgstr "is blocked"
+
+#: .\models.py:15 .\models.py:33
+msgid "тэги"
+msgstr "tags"
+
+#: .\models.py:20
+msgid "пост"
+msgstr "post"
+
+#: .\models.py:29
+msgid "название"
+msgstr "name"
+
+#: .\models.py:32
+msgid "тэг"
+msgstr "tag"
+
+#: .\views.py:32
+msgid "Длина заголовка"
+msgstr "Title length"
+
+#: .\views.py:33
+msgid "Длина текста"
+msgstr "Text length"
+
+#: .\views.py:34
+msgid "Самый частый символ"
+msgstr "Most frequent character"
+
+#: .\views.py:35
+msgid "Самый редкий символ"
+msgstr "Rarest symbol"
+
+#: .\views.py:43
+msgid "Вы не авторизованы"
+msgstr "You are not logged in"
