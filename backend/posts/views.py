@@ -18,25 +18,6 @@ class PostViewSet(ModelViewSet):
     def get_queryset(self):
         return Post.objects.allowed(self.request.user)
 
-    @action(detail=True, url_path='stat')
-    def post_statistics(self, request, post_id):
-        post = self.get_object()
-
-        letters = dict()
-        for let in post.text.upper():
-            if let not in letters:
-                letters[let] = 0
-            letters[let] += 1
-
-        data = {
-            _('Длина заголовка'): len(post.title),
-            _('Длина текста'): len(post.text),
-            _('Самый частый символ'): max(letters, key=lambda let: letters[let]),
-            _('Самый редкий символ'): min(letters, key=lambda let: letters[let]),
-        }
-
-        return Response(data)
-
     @action(detail=False, url_path='my')
     def my_posts(self, request):
         if not request.user.is_authenticated:
