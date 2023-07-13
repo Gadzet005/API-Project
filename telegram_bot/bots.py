@@ -1,7 +1,9 @@
+import math
 import asyncio
-import aiohttp
 import json
+from datetime import datetime
 
+import aiohttp
 from db import DB
 
 
@@ -10,7 +12,7 @@ class BaseTelegramBot:
         self.token = token
         self.current_update_id = 0
         self.commands = {}
-        self.db = DB()
+        self.db = DB(cleaner_delete_event=self.cleaner_delete_event)
 
     async def _useMethod(self, method_name, request_method_name="GET", **kwargs):
         async with aiohttp.ClientSession() as session:
@@ -34,10 +36,18 @@ class BaseTelegramBot:
     def sendMessage(self, chat_id, text):
         return self.usePostMethod("sendMessage", chat_id=chat_id, text=text)
 
+    async def sendBigMessage(self, chat_id, text):
+        for i in range(math.ceil(len(text) / 4000)):
+            text_fragment = text[4000 * i:4000 * (i + 1)]
+            await self.sendMessage(chat_id, text_fragment)
+
     def editMessage(self, chat_id, message_id, text):
         return self.usePostMethod(
             "editMessageText", chat_id=chat_id, message_id=message_id, text=text
         )
+
+    def deleteMessage(self, chat_id, message_id):
+        return self.usePostMethod("deleteMessage", chat_id=chat_id, message_id=message_id)
 
     async def setBotCommands(self):
         bot_commands = [
@@ -60,7 +70,8 @@ class BaseTelegramBot:
         chat_id = message.get("chat").pop("id")
         text = message.get("text")
 
-        context = await self.db.get_chat_context(chat_id)
+        context = await self.db.getChatContext(chat_id)
+        update_time = context.pop("update_time", None) # NOQA
         command_name = context.get("command_name") if context else text
         command = self.commands.get(command_name)
 
@@ -73,9 +84,13 @@ class BaseTelegramBot:
     async def startWork(self):
         await self.setBotCommands()
         asyncio.create_task(self.updatesReceiver())
+        self.db.startCleaner(12 * 60 * 60)
 
     async def stopWork(self):
         await self.db.close()
+
+    def cleaner_delete_event(self, chat_id):
+        self.sendMessage(chat_id, "Вы слишком долго не отвечали. Ввод данных сброшен")
 
 
 class TelegramBot(BaseTelegramBot):
@@ -97,12 +112,13 @@ class TelegramBot(BaseTelegramBot):
         }
 
     def postToText(self, post):
-        title, text = post.get('title'), post.get("text")
-        if len(text) > 500:
-            text = text[:500] + "..."
+        title, text, creation_date = post.get('title'), post.get("text"), post.get('creation_date')
         author = post.get("author_info").get("name")
 
-        return title + f"\nАвтор {author}\n" + text
+        creation_date_object = datetime.strptime(creation_date, "%Y-%m-%dT%H:%M:%S.%f%z")
+        creation_date_text = creation_date_object.strftime("%H:%M %d-%m-%Y")
+
+        return title + f"\nАвтор {author}\nДата и время создания: {creation_date_text}\n" + text
 
     async def getBackendData(self, path):
         async with aiohttp.ClientSession() as session:
@@ -130,13 +146,17 @@ class TelegramBot(BaseTelegramBot):
         sended_message_response = await send_message_task
         sended_message_id = sended_message_response.get("result").get("message_id")
 
-        self.editMessage(chat_id, sended_message_id, message_text)
+        self.deleteMessage(chat_id, sended_message_id)
+        asyncio.create_task(self.sendBigMessage(chat_id, message_text))
 
     async def showPost(self, chat_id, message, context):
         step = len(context.keys())
 
         if step == 0:
-            await self.db.set_chat_context(chat_id, {"command_name": "/show_post"})
+            await self.db.setChatContext(chat_id, {
+                "command_name": "/show_post",
+                "update_time": datetime.now().strftime("%H:%M %d-%m-%Y")
+            })
             self.sendMessage(chat_id=chat_id, text="Укажите id поста")
         else:
             try:
@@ -148,17 +168,23 @@ class TelegramBot(BaseTelegramBot):
             status_code, post = await self.getBackendData(f"posts/{post_id}")
             message_text = self.postToText(post) if status_code == 200 else "Такого поста нет..."
 
-            await self.db.clear_chat_context(chat_id)
+            await self.db.clearChatContext(chat_id)
             self.sendMessage(chat_id, message_text)
 
     async def getAuthToken(self, chat_id, message, context):
         step = len(context.keys())
 
         if step == 0:
-            await self.db.set_chat_context(chat_id, {"command_name": "/get_auth_token"})
+            await self.db.setChatContext(chat_id, {
+                "command_name": "/get_auth_token",
+                "update_time": datetime.now().strftime("%H:%M %d-%m-%Y")
+            })
             self.sendMessage(chat_id, "Укажите имя пользователя")
         elif step == 1:
-            await self.db.set_chat_context(chat_id, {**context, "username": message.get("text")})
+            await self.db.setChatContext(chat_id, {
+                **context, "username": message.get("text"),
+
+                })
             self.sendMessage(chat_id, "Укажите пароль")
         else:
             data = {"username": context.get("username"), "password": message.get("text")}
@@ -171,5 +197,5 @@ class TelegramBot(BaseTelegramBot):
                 message_text = f"Ваш токен: {result.get('token')}"
             else:
                 message_text = "Неправильное имя пользователя или пароль"
-            await self.db.clear_chat_context(chat_id)
+            await self.db.clearChatContext(chat_id)
             self.sendMessage(chat_id, message_text)
