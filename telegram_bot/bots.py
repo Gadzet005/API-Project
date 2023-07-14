@@ -5,6 +5,7 @@ from datetime import datetime
 
 import aiohttp
 from db import DB
+import config
 
 
 class BaseTelegramBot:
@@ -85,6 +86,7 @@ class BaseTelegramBot:
         await self.setBotCommands()
         asyncio.create_task(self.updatesReceiver())
         self.db.startCleaner(12 * 60 * 60)
+        print("Бот успешно запущен")
 
     async def stopWork(self):
         await self.db.close()
@@ -122,7 +124,7 @@ class TelegramBot(BaseTelegramBot):
 
     async def getBackendData(self, path):
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"http://127.0.0.1:8000/api/v1/{path}",) as response:
+            async with session.get(f"http://{config.BACKEND_DOMEN}/api/v1/{path}",) as response:
                 result = await response.json()
                 status_code = response.status
         return status_code, result
@@ -169,7 +171,7 @@ class TelegramBot(BaseTelegramBot):
             message_text = self.postToText(post) if status_code == 200 else "Такого поста нет..."
 
             await self.db.clearChatContext(chat_id)
-            self.sendMessage(chat_id, message_text)
+            asyncio.create_task(self.sendBigMessage(chat_id, message_text))
 
     async def getAuthToken(self, chat_id, message, context):
         step = len(context.keys())
@@ -189,7 +191,7 @@ class TelegramBot(BaseTelegramBot):
         else:
             data = {"username": context.get("username"), "password": message.get("text")}
             async with aiohttp.ClientSession() as session:
-                async with session.post("http://127.0.0.1:8000/api/v1/oauth/", data=data) as response:
+                async with session.post(f"http://{config.BACKEND_DOMEN}/api/v1/oauth/", data=data) as response:
                     result = await response.json()
                     status_code = response.status
 

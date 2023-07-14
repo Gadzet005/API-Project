@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  backend:
+    build: .
+    command: python backend/manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+
+  teleram_bot:
+    build: .
+    command: python telegram_bot/main.py
+    env_file:
+      - ./.env
+    depends_on:
+      - redis
+      - backend
+
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
