@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.authtoken import views
-from config.settings import config
+from config.settings import STATE
 
 
 from users.views import UserViewSet
@@ -15,7 +15,7 @@ urlpatterns = [
     path('oauth/', views.obtain_auth_token),
 ]
 
-if config.STATE == 'DEV':
+if STATE == 'DEV':
     urlpatterns.append(
         path('auth/', include('rest_framework.urls'))
     )

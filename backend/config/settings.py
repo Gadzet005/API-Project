@@ -1,16 +1,13 @@
 from pathlib import Path
 
-from config.config import ProjectConfig
-
+import config.env as env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-config = ProjectConfig()
-
-SECRET_KEY = config.SECRET_KEY
-DEBUG = config.DEBUG
-ALLOWED_HOSTS = config.ALLOWED_HOSTS
+STATE = env.STATE
+SECRET_KEY = env.SECRET_KEY
+DEBUG = env.DEBUG
+ALLOWED_HOSTS = env.ALLOWED_HOSTS
 
 INTERNAL_IPS = ["127.0.0.1"]
 
@@ -124,7 +121,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-if config.STATE == 'DEV':
+if env.STATE == 'DEV':
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'].append('rest_framework.renderers.BrowsableAPIRenderer')
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'].append('rest_framework.renderers.AdminRenderer')
     REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'].append('rest_framework.authentication.SessionAuthentication')

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from config.settings import config
+from config.settings import STATE
 
 
 urlpatterns = [
@@ -10,7 +10,7 @@ urlpatterns = [
     path('api/v1/', include('posts.urls')),
 ]
 
-if config.STATE == "DEV":
+if STATE == "DEV":
     urlpatterns.append(
         path("__debug__/", include("debug_toolbar.urls"))
     )
