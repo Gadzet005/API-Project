@@ -72,7 +72,7 @@ class BaseTelegramBot:
         text = message.get("text")
 
         context = await self.db.getChatContext(chat_id)
-        update_time = context.pop("update_time", None) # NOQA
+        _ = context.pop("update_time", None)
         command_name = context.get("command_name") if context else text
         command = self.commands.get(command_name)
 
