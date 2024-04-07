@@ -1,1 +1,1 @@
-# Небольшой проект для экспериментов над REST API и ассинхронным программированием в Python
+REST API + async telegram bot
